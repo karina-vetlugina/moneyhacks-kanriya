@@ -8,35 +8,64 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Fixed status bar at top -->
-  <header id="status-bar">
-    <div class="status-item">
-      <span class="status-label">Money</span>
-      <span id="money-display">$0</span>
+  <!-- Fixed top metrics bar (mobile-first) -->
+  <header id="metrics-bar" role="banner">
+    <div class="metric-item" id="balance-metric">
+      <span class="metric-label">Account Balance</span>
+      <span id="balance-display" class="metric-value">$0</span>
     </div>
-    <div class="status-item">
-      <span class="status-label">Spent this week</span>
-      <span id="spent-display">$0</span>
+    <div class="metric-item" id="car-goal-metric">
+      <span class="metric-label">Car Goal</span>
+      <div class="progress-wrap">
+        <div id="car-goal-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <span id="car-goal-label" class="metric-value metric-value--small">$0 / $15,000</span>
+    </div>
+    <div class="metric-item metrics-hidden" id="credit-section" aria-hidden="true">
+      <span class="metric-label">Credit</span>
+      <button type="button" id="credit-display" class="metric-value metric-value--clickable" aria-label="View credit score">—</button>
     </div>
   </header>
 
   <!-- Main game screen -->
   <main id="game-screen">
-    <!-- Background container (placeholder for future images) -->
     <div id="background-container"></div>
 
-    <!-- Bottom overlay: dialogue + choices -->
+    <!-- Fact overlay (phase 2) — centered, above background, hidden by default -->
+    <div id="fact-overlay" class="fact-overlay" aria-hidden="true">
+      <div class="fact-backdrop"></div>
+      <div class="fact-card">
+        <p id="fact-content" class="fact-content"></p>
+        <div class="fact-actions">
+          <button type="button" id="fact-exit-btn" class="fact-btn">Exit</button>
+        </div>
+      </div>
+    </div>
+
     <div id="overlay">
       <div id="dialogue-area">
         <p id="dialogue-text">Loading...</p>
+        <button type="button" id="next-phase-btn" class="next-phase-btn" aria-label="Next" title="Next">→</button>
       </div>
-      <div id="choices-container">
-        <!-- Choice buttons rendered dynamically by game.js -->
-      </div>
+      <div id="choices-container" class="phase-hidden"></div>
     </div>
   </main>
 
-  <!-- Load data first, then game logic -->
+  <!-- Credit score modal (pure JS/CSS) -->
+  <div id="credit-modal" class="modal" role="dialog" aria-labelledby="credit-modal-title" aria-modal="true" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel">
+      <h2 id="credit-modal-title" class="modal-title">Credit Score</h2>
+      <p class="modal-score-row">
+        <span id="credit-modal-score" class="modal-score-number">—</span>
+        <span id="credit-modal-rating" class="modal-score-rating">—</span>
+      </p>
+      <p class="modal-rating-legend">300–579 Poor · 580–669 Fair · 670–739 Good · 740–799 Very Good · 800+ Excellent</p>
+      <ul id="credit-modal-bullets" class="modal-bullets"></ul>
+      <button type="button" id="credit-modal-close" class="modal-close-btn">Close</button>
+    </div>
+  </div>
+
   <script src="data/slides.js"></script>
   <script src="game.js"></script>
 </body>
