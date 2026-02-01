@@ -138,6 +138,7 @@ const DOM = {
   goalPopupBtn: null,
   // Credit education popup
   creditEducationPopup: null,
+  creditEducationText: null,
   creditEducationExit: null,
   // Investment options popup (not stored in tips)
   investmentOptionsPopup: null,
@@ -185,6 +186,7 @@ function init() {
   DOM.goalPopupText = document.getElementById("goal-popup-text");
   DOM.goalPopupBtn = document.getElementById("goal-popup-btn");
   DOM.creditEducationPopup = document.getElementById("credit-education-popup");
+  DOM.creditEducationText = document.getElementById("credit-education-text");
   DOM.creditEducationExit = document.getElementById("credit-education-exit");
   DOM.investmentOptionsPopup = document.getElementById("investment-options-popup");
   DOM.investmentOptionsText = document.getElementById("investment-options-text");
@@ -607,11 +609,12 @@ let _creditEducationNextSlideId = null;
  * @param {string} nextSlideId - where to go when Exit is clicked
  */
 function showCreditEducationPopup(nextSlideId) {
-  if (!DOM.creditEducationPopup) return;
+  if (!DOM.creditEducationPopup || !DOM.creditEducationText) return;
 
   unlockFactById("building_credit");
   _creditEducationNextSlideId = nextSlideId;
 
+  DOM.creditEducationText.textContent = "Using credit and paying it on time helps build your credit score.";
   DOM.creditEducationPopup.classList.add("credit-education-visible");
   DOM.creditEducationPopup.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -676,6 +679,7 @@ function closeInvestmentOptionsPopup() {
 
 /**
  * Type dialogue character by character. Click Next to skip to full text.
+ * Used only for main dialogue box, not for tips or popups.
  * @param {string} fullText - Full dialogue string to type out
  */
 function typeDialogue(fullText) {
