@@ -53,7 +53,11 @@
     <div id="overlay">
       <div id="dialogue-area">
         <p id="dialogue-text">Loading...</p>
-        <button type="button" id="next-phase-btn" class="next-phase-btn" aria-label="Next" title="Next">➜</button>
+        <button type="button" id="next-phase-btn" class="next-phase-btn" aria-label="Next" title="Next">
+          <svg class="next-phase-icon" viewBox="0 0 16 16" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+            <path d="M5 4 L5 12 L12 8 Z" />
+          </svg>
+        </button>
       </div>
       <div id="choices-container" class="phase-hidden"></div>
     </div>

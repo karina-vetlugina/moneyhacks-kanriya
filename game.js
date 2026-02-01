@@ -30,6 +30,11 @@ const gameState = {
 
 const OPENING_SLIDE_IDS = ["birthday_cake_lit", "eyes_closed", "birthday_wish_choices", "goal_unlocked", "cake_out", "time_transition"];
 
+/* Dialogue typing animation */
+const TYPING_MS_PER_CHAR = 35;
+let typingIntervalId = null;
+let currentDialogueFullText = "";
+
 /* --------------------------------------------------
    Achievements system - facts as unlockable rewards
    -------------------------------------------------- */
@@ -168,7 +173,11 @@ function init() {
 
   if (!SLIDES) {
     console.error("SLIDES data not loaded. Ensure data/slides.js is loaded first.");
-    if (DOM.dialogueText) DOM.dialogueText.textContent = "Error: Slide data not found.";
+    if (DOM.dialogueText) {
+      if (typingIntervalId) clearInterval(typingIntervalId);
+      typingIntervalId = null;
+      DOM.dialogueText.textContent = "Error: Slide data not found.";
+    }
     return;
   }
 
@@ -566,9 +575,42 @@ function closeGoalPopup() {
 }
 
 /**
+ * Type dialogue character by character. Click Next to skip to full text.
+ * @param {string} fullText - Full dialogue string to type out
+ */
+function typeDialogue(fullText) {
+  if (!DOM.dialogueText) return;
+  if (typingIntervalId) {
+    clearInterval(typingIntervalId);
+    typingIntervalId = null;
+  }
+  currentDialogueFullText = fullText;
+  DOM.dialogueText.textContent = "";
+  if (fullText === "") return;
+  let index = 0;
+  typingIntervalId = setInterval(() => {
+    index += 1;
+    if (index >= fullText.length) {
+      clearInterval(typingIntervalId);
+      typingIntervalId = null;
+      DOM.dialogueText.textContent = fullText;
+      return;
+    }
+    DOM.dialogueText.textContent = fullText.slice(0, index);
+  }, TYPING_MS_PER_CHAR);
+}
+
+/**
  * Advance to next phase safely. Phase 0 → 1 (if factText), 2 (choices), or nextSlideId.
+ * First click during typing skips to full dialogue; second click advances.
  */
 function nextPhase() {
+  if (typingIntervalId) {
+    clearInterval(typingIntervalId);
+    typingIntervalId = null;
+    if (DOM.dialogueText) DOM.dialogueText.textContent = currentDialogueFullText;
+    return;
+  }
   const slide = SLIDES[gameState.currentSlideId];
   if (!slide) return;
 
@@ -642,7 +684,11 @@ function renderSlide(slideId) {
 
   if (!slide) {
     console.error(`Slide not found: ${slideId}`);
-    if (DOM.dialogueText) DOM.dialogueText.textContent = `Error: Slide "${slideId}" not found.`;
+    if (DOM.dialogueText) {
+      if (typingIntervalId) clearInterval(typingIntervalId);
+      typingIntervalId = null;
+      DOM.dialogueText.textContent = `Error: Slide "${slideId}" not found.`;
+    }
     renderChoices([]);
     return;
   }
@@ -682,7 +728,7 @@ function renderSlide(slideId) {
   }
 
   if (DOM.dialogueText) {
-    DOM.dialogueText.textContent = slide.text;
+    typeDialogue(slide.text || "");
   }
 
   if (slide.id === "goal_unlocked") {
