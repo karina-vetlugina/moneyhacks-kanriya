@@ -373,8 +373,8 @@ function openWalletView() {
   const walletBg = DOM.walletView.querySelector(".wallet-view-bg");
   if (walletBg) {
     const imgPath = gameState.creditVisible
-      ? "/assets/slides/bank-account-new-cropped.png"
-      : "/assets/slides/bank-account-old-cropped.png";
+      ? "/assets/slides/bank_account_new.png"
+      : "/assets/slides/bank_account_old.png";
     walletBg.style.backgroundImage = `url("${imgPath}")`;
   }
   DOM.walletView.classList.add("wallet-view-open");
@@ -722,6 +722,22 @@ function closeInvestmentOptionsPopup() {
 }
 
 /**
+ * Return dialogue text with the full sentence "You open your banking app." wrapped in <strong>. Escapes HTML.
+ * @param {string} text
+ * @returns {string} HTML string safe for innerHTML
+ */
+function formatDialogueWithBold(text) {
+  if (!text || typeof text !== "string") return "";
+  const escaped = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  const phrase = "You open your banking app.";
+  const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+  return escaped.replace(regex, "<strong>$&</strong>");
+}
+
+/**
  * Type dialogue character by character. Click Next to skip to full text.
  * Used only for main dialogue box, not for tips or popups.
  * @param {string} fullText - Full dialogue string to type out
@@ -741,7 +757,7 @@ function typeDialogue(fullText) {
     if (index >= fullText.length) {
       clearInterval(typingIntervalId);
       typingIntervalId = null;
-      DOM.dialogueText.textContent = fullText;
+      DOM.dialogueText.innerHTML = formatDialogueWithBold(fullText);
       return;
     }
     DOM.dialogueText.textContent = fullText.slice(0, index);
@@ -756,7 +772,7 @@ function nextPhase() {
   if (typingIntervalId) {
     clearInterval(typingIntervalId);
     typingIntervalId = null;
-    if (DOM.dialogueText) DOM.dialogueText.textContent = currentDialogueFullText;
+    if (DOM.dialogueText) DOM.dialogueText.innerHTML = formatDialogueWithBold(currentDialogueFullText);
     return;
   }
   const slide = SLIDES[gameState.currentSlideId];

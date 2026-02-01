@@ -102,7 +102,7 @@ const SLIDES = {
   fun_fact_notification: {
     id: "fun_fact_notification",
     text: "You open your banking app.",
-    background: "/assets/slides/phone-basic.png",
+    background: "/assets/slides/bedroom.png",
     nextSlideId: "savings_decision",
     choices: [],
     onEnter: function (gameState) {
@@ -285,8 +285,8 @@ const SLIDES = {
 
   summer_job_secured: {
     id: "summer_job_secured",
-    text: "You get the summer job.\n\nYou're working more hours now.\n\nYour bi-weekly paycheck increases to $1,500.",
-    background: "/assets/slides/summer_job.png",
+    text: "You wake up early even in summer now - you want to buy the car so bad. It's your dream to have your own.\n\nYou open your banking app.",
+    background: "/assets/slides/bedroom.png",
     nextSlideId: "summer_paycheck_received",
     choices: [],
     onEnter: function (gameState) {
