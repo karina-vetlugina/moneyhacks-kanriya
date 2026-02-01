@@ -65,7 +65,14 @@ const ACHIEVEMENTS = [
   {
     id: "paying_yourself_first",
     title: "Tip: Pay yourself first",
-    description: "Paying yourself first makes saving easier. When your expenses are low, saving around 70% helps you reach your goals faster.",
+    description: "Paying yourself first makes saving easier. Teens with minimal expenses may be able to save 50-70% of their income.",
+    unlocked: false,
+    episodeUnlock: 0,
+  },
+  {
+    id: "time_in_the_market",
+    title: "Tip: Time in the market matters",
+    description: "Investing is a time game. Starting earlier allows compound growth to work in your favor and can significantly increase long-term savings.",
     unlocked: false,
     episodeUnlock: 0,
   },

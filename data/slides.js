@@ -113,6 +113,44 @@ const SLIDES = {
     id: "after_saving_decision",
     text: "You've saved $350. Your car goal is getting closer!",
     background: "/assets/slides/phone_paycheck.png",
+    nextSlideId: "savings_milestone",
+    choices: [],
+  },
+
+  // --------------------------------------------------
+  // Stage 3 — TFSA education
+  // --------------------------------------------------
+  savings_milestone: {
+    id: "savings_milestone",
+    text: "You glance at your savings.\n\nYou're almost at $6,000.\n\nDo you want to open a Tax-Free Savings Account (TFSA)?",
+    background: "/assets/slides/phone_paycheck.png",
+    nextSlideId: "tfsa_tip_notification",
+    choices: [],
+  },
+
+  tfsa_tip_notification: {
+    id: "tfsa_tip_notification",
+    text: "You start reading about long-term investing.",
+    background: "/assets/slides/phone_paycheck.png",
+    nextSlideId: "investment_options",
+    choices: [],
+    onEnter: function (gameState) {
+      showFunFactNotification("Time in the market matters", "time_in_the_market");
+    },
+  },
+
+  investment_options: {
+    id: "investment_options",
+    text: "If you open a TFSA, you'll need to choose how your money is invested.\n\nHere are your main options:\n\nIndividual Stocks\nAn individual investment in a single company, it can be quite risky as it is entirely dependent on the financial performance of the single company.\n\nETFs\nAn Exchange Traded Fund is a basket of many individual stocks, managed by an organization. This is less risky as the variety of stocks helps balance out any major falls.",
+    background: "/assets/slides/phone_paycheck.png",
+    nextSlideId: "tfsa_decision",
+    choices: [],
+  },
+
+  tfsa_decision: {
+    id: "tfsa_decision",
+    text: "Coming soon.",
+    background: "/assets/slides/phone_paycheck.png",
     nextSlideId: "check-bank",
     choices: [],
   },
