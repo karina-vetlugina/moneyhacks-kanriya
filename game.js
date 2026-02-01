@@ -15,7 +15,7 @@
 const gameState = {
   currentSlideId: "birthday_cake_lit",
   scenePhase: 0, // 0 = dialogue, 1 = fact, 2 = choices
-  accountBalance: 2000,
+  accountBalance: 5700,
   totalSaved: 0,
   totalSpent: 0,
   carGoalAmount: 15000,
@@ -25,9 +25,10 @@ const gameState = {
   creditScore: 680,
   creditVisible: false,
   completedEpisodes: [], // Track completed episode numbers
+  unlockedFacts: [], // Facts unlocked during gameplay (shown in info panel)
 };
 
-const OPENING_SLIDE_IDS = ["birthday_cake_lit", "eyes_closed", "birthday_wish_choices", "goal_unlocked", "cake_out"];
+const OPENING_SLIDE_IDS = ["birthday_cake_lit", "eyes_closed", "birthday_wish_choices", "goal_unlocked", "cake_out", "time_transition"];
 
 /* --------------------------------------------------
    Achievements system - facts as unlockable rewards
@@ -61,6 +62,13 @@ const ACHIEVEMENTS = [
     unlocked: false,
     episodeUnlock: 2,
   },
+  {
+    id: "paying_yourself_first",
+    title: "Tip: Pay yourself first",
+    description: "Paying yourself first makes saving easier. When your expenses are low, saving around 70% helps you reach your goals faster.",
+    unlocked: false,
+    episodeUnlock: 0,
+  },
 ];
 
 /* --------------------------------------------------
@@ -74,7 +82,9 @@ const DOM = {
   nextPhaseBtn: null,
   // Fact overlay
   factOverlay: null,
+  factTitle: null,
   factContent: null,
+  factNextBtn: null,
   factExitBtn: null,
   // Metrics bar
   metricsBar: null,
@@ -113,7 +123,9 @@ function init() {
   DOM.nextPhaseBtn = document.getElementById("next-phase-btn");
 
   DOM.factOverlay = document.getElementById("fact-overlay");
+  DOM.factTitle = document.getElementById("fact-title");
   DOM.factContent = document.getElementById("fact-content");
+  DOM.factNextBtn = document.getElementById("fact-next-btn");
   DOM.factExitBtn = document.getElementById("fact-exit-btn");
 
   DOM.metricsBar = document.getElementById("metrics-bar");
@@ -163,6 +175,9 @@ function init() {
   if (DOM.nextPhaseBtn) {
     DOM.nextPhaseBtn.addEventListener("click", nextPhase);
   }
+  if (DOM.factNextBtn) {
+    DOM.factNextBtn.addEventListener("click", nextPhase);
+  }
   if (DOM.factExitBtn) {
     DOM.factExitBtn.addEventListener("click", nextPhase);
   }
@@ -195,6 +210,7 @@ function addIncome(amount) {
   gameState.accountBalance += amount;
   recalculateCreditScore();
   updateMetricsBar();
+  flashBalanceChange("add");
 }
 
 /**
@@ -208,6 +224,7 @@ function spendMoney(amount) {
   gameState.totalSpent += amount;
   recalculateCreditScore();
   updateMetricsBar();
+  if (actual > 0) flashBalanceChange("deduct");
 }
 
 /**
@@ -222,6 +239,7 @@ function transferToSavings(amount) {
   gameState.totalSaved += actual;
   recalculateCreditScore();
   updateMetricsBar();
+  flashBalanceChange("deduct");
 }
 
 /**
@@ -280,6 +298,18 @@ function getCreditExplanations() {
 /* --------------------------------------------------
    Metrics bar (live updates)
    -------------------------------------------------- */
+
+/** Flash balance green (added) or red (deducted) for 2 seconds */
+function flashBalanceChange(direction) {
+  if (!DOM.balanceDisplay) return;
+  DOM.balanceDisplay.classList.remove("balance-flash-add", "balance-flash-deduct");
+  DOM.balanceDisplay.offsetHeight; /* force reflow */
+  DOM.balanceDisplay.classList.add(direction === "add" ? "balance-flash-add" : "balance-flash-deduct");
+  setTimeout(() => {
+    DOM.balanceDisplay.classList.remove("balance-flash-add", "balance-flash-deduct");
+  }, 2000);
+}
+
 function updateMetricsBar() {
   if (DOM.balanceDisplay) {
     DOM.balanceDisplay.textContent = `$${gameState.accountBalance.toLocaleString()}`;
@@ -309,6 +339,49 @@ function updateMetricsBar() {
 /* --------------------------------------------------
    Achievements system - unlock and notification logic
    -------------------------------------------------- */
+
+/**
+ * Unlock a fact/achievement by ID (adds to info panel, persists).
+ * @param {string} achievementId
+ */
+function unlockFactById(achievementId) {
+  const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
+  if (!achievement) return;
+  if (achievement.unlocked) return;
+
+  achievement.unlocked = true;
+  if (!gameState.unlockedFacts.includes(achievementId)) {
+    gameState.unlockedFacts.push(achievementId);
+  }
+}
+
+/**
+ * Show fun fact notification at top (title only), unlock full description in info panel.
+ * Same visual style as achievement notifications.
+ * @param {string} title - displayed in notification banner
+ * @param {string} achievementId - achievement to unlock (full description in info panel)
+ */
+function showFunFactNotification(title, achievementId) {
+  unlockFactById(achievementId);
+  if (!DOM.notificationContainer) return;
+
+  const notification = document.createElement("div");
+  notification.className = "achievement-notification";
+  notification.textContent = `Tip: ${title}`;
+
+  DOM.notificationContainer.appendChild(notification);
+
+  setTimeout(() => {
+    notification.classList.add("notification-visible");
+  }, 10);
+
+  setTimeout(() => {
+    notification.classList.remove("notification-visible");
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
+}
 
 /**
  * Complete an episode and unlock all associated achievements.
@@ -348,7 +421,7 @@ function showAchievementNotification(achievement) {
 
   const notification = document.createElement("div");
   notification.className = "achievement-notification";
-  notification.textContent = `New Tip Unlocked: ${achievement.title}`;
+  notification.textContent = `Tip: ${achievement.title}`;
 
   DOM.notificationContainer.appendChild(notification);
 
@@ -514,7 +587,7 @@ function renderDialoguePhase() {
 }
 
 /**
- * Phase 1 — Fact overlay: show fact card with slide.factText, Next and Exit; dialogue dimmed.
+ * Phase 1 — Fact overlay: show fact card with title, text, Next and Exit; dialogue dimmed.
  */
 function renderFactPhase() {
   const slide = SLIDES[gameState.currentSlideId];
@@ -522,7 +595,12 @@ function renderFactPhase() {
 
   if (DOM.nextPhaseBtn) DOM.nextPhaseBtn.classList.add("phase-hidden");
   if (DOM.choicesContainer) DOM.choicesContainer.classList.add("phase-hidden");
+  if (DOM.factTitle) {
+    DOM.factTitle.textContent = slide.factTitle || "";
+    DOM.factTitle.style.display = slide.factTitle ? "" : "none";
+  }
   if (DOM.factContent) DOM.factContent.textContent = slide.factText || "";
+  if (DOM.factNextBtn) DOM.factNextBtn.style.display = slide.factTitle ? "" : "none";
   DOM.factOverlay.classList.add("fact-visible");
   if (DOM.dialogueArea) DOM.dialogueArea.classList.add("overlay-dimmed");
 }
@@ -610,7 +688,7 @@ function updateMetricsBarVisibility() {
 }
 
 /**
- * Render choice buttons. Supports locked choices with difficulty labels.
+ * Render choice buttons. Supports locked choices.
  * @param {Array<{label: string, nextSlideId?: string, locked?: boolean, difficulty?: string, effect?: object}>} choices
  */
 function renderChoices(choices) {
@@ -632,11 +710,11 @@ function renderChoices(choices) {
     labelSpan.textContent = choice.label;
     btn.appendChild(labelSpan);
 
-    if (choice.difficulty) {
-      const diffSpan = document.createElement("span");
-      diffSpan.className = "choice-difficulty";
-      diffSpan.textContent = choice.difficulty;
-      btn.appendChild(diffSpan);
+    if (choice.subtitle) {
+      const subSpan = document.createElement("span");
+      subSpan.className = "choice-subtitle";
+      subSpan.textContent = choice.subtitle;
+      btn.appendChild(subSpan);
     }
 
     if (!choice.locked && choice.nextSlideId) {

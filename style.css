@@ -81,6 +81,15 @@ html, body {
 .metric-value {
   font-size: 1.05rem;
   font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+#balance-display.balance-flash-add {
+  color: #2ecc71;
+}
+
+#balance-display.balance-flash-deduct {
+  color: #e74c3c;
 }
 
 .metric-value--small {
@@ -232,6 +241,13 @@ html, body {
   border: 1px solid #444;
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.fact-overlay .fact-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
 }
 
 .fact-overlay .fact-content {
@@ -449,22 +465,15 @@ html, body {
   display: block;
 }
 
-.choice-difficulty {
+.choice-subtitle {
   font-size: 0.75rem;
   color: rgba(67, 40, 24, 0.7);
   text-transform: lowercase;
 }
 
 .choice-btn--locked {
-  opacity: 0.5;
   cursor: not-allowed;
-  background: #a08060 !important;
-  border-color: #7a6040 !important;
   pointer-events: none;
-}
-
-.choice-btn--locked .choice-difficulty {
-  color: rgba(67, 40, 24, 0.5);
 }
 
 .choice-btn {
