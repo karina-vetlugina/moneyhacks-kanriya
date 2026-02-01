@@ -76,6 +76,13 @@ const ACHIEVEMENTS = [
     unlocked: false,
     episodeUnlock: 0,
   },
+  {
+    id: "car_costs",
+    title: "Tip: Cars cost more than the sticker price",
+    description: "Cars come with ongoing costs beyond the purchase price. Insurance, fuel, maintenance, and repairs add up over time and should be planned for.",
+    unlocked: false,
+    episodeUnlock: 0,
+  },
 ];
 
 /* --------------------------------------------------

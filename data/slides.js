@@ -143,16 +143,52 @@ const SLIDES = {
     id: "investment_options",
     text: "If you open a TFSA, you'll need to choose how your money is invested.\n\nHere are your main options:\n\nIndividual Stocks\nAn individual investment in a single company, it can be quite risky as it is entirely dependent on the financial performance of the single company.\n\nETFs\nAn Exchange Traded Fund is a basket of many individual stocks, managed by an organization. This is less risky as the variety of stocks helps balance out any major falls.",
     background: "/assets/slides/phone_paycheck.png",
-    nextSlideId: "tfsa_decision",
+    nextSlideId: "time_jump_month2",
     choices: [],
   },
 
-  tfsa_decision: {
-    id: "tfsa_decision",
-    text: "Coming soon.",
+  // --------------------------------------------------
+  // Stage 4 — Month 2 paycheck and car costs
+  // --------------------------------------------------
+  time_jump_month2: {
+    id: "time_jump_month2",
+    text: "One month later…",
+    background: "black",
+    nextSlideId: "paycheck_month2",
+    choices: [],
+  },
+
+  paycheck_month2: {
+    id: "paycheck_month2",
+    text: "Your phone buzzes.\n\nPaycheck received: $500.",
+    background: "/assets/slides/phone_paycheck.png",
+    nextSlideId: "savings_decision_month2",
+    choices: [],
+    onEnter: function (gameState) {
+      addIncome(500);
+    },
+  },
+
+  savings_decision_month2: {
+    id: "savings_decision_month2",
+    text: "You review your balance.\n\nHow much of this paycheck are you saving?",
+    background: "/assets/slides/phone_paycheck.png",
+    choices: [
+      { label: "Save 30% ($150)", locked: true },
+      { label: "Save 50% ($250)", locked: true },
+      { label: "Save 70% ($350)", nextSlideId: "car_budget_explanation", effect: { type: "transferToSavings", amount: 350 } },
+    ],
+  },
+
+  car_budget_explanation: {
+    id: "car_budget_explanation",
+    text: "You start looking at cars more seriously.\n\nYour estimate for a car is around $10,000.\n\nTo stay financially safe, you decide to save $15,000 before buying - keeping some savings aside.",
     background: "/assets/slides/phone_paycheck.png",
     nextSlideId: "check-bank",
     choices: [],
+    onEnter: function (gameState) {
+      showFunFactNotification("Cars cost more than the sticker price", "car_costs");
+    },
   },
 
   // --------------------------------------------------
