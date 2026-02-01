@@ -373,8 +373,8 @@ function openWalletView() {
   const walletBg = DOM.walletView.querySelector(".wallet-view-bg");
   if (walletBg) {
     const imgPath = gameState.creditVisible
-      ? "/assets/slides/bank_account_new.png"
-      : "/assets/slides/bank_account_old.png";
+      ? "/assets/slides/bank-account-new-cropped.png"
+      : "/assets/slides/bank-account-old-cropped.png";
     walletBg.style.backgroundImage = `url("${imgPath}")`;
   }
   DOM.walletView.classList.add("wallet-view-open");

@@ -83,7 +83,7 @@ const SLIDES = {
   phone_unlock: {
     id: "phone_unlock",
     text: "You unlock your phone.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "paycheck_received",
     choices: [],
   },
@@ -91,7 +91,7 @@ const SLIDES = {
   paycheck_received: {
     id: "paycheck_received",
     text: "Paycheck received: $500.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "fun_fact_notification",
     choices: [],
     onEnter: function (gameState) {
@@ -102,7 +102,7 @@ const SLIDES = {
   fun_fact_notification: {
     id: "fun_fact_notification",
     text: "You open your banking app.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "savings_decision",
     choices: [],
     onEnter: function (gameState) {
@@ -113,7 +113,7 @@ const SLIDES = {
   savings_decision: {
     id: "savings_decision",
     text: "You check your balance.\n\nHow much of this paycheck are you saving?",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     choices: [
       { label: "Save 30% ($150)", locked: true },
       { label: "Save 50% ($250)", locked: true },
@@ -124,7 +124,7 @@ const SLIDES = {
   after_saving_decision: {
     id: "after_saving_decision",
     text: "You've saved $350. Your car goal is getting closer!",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "savings_milestone",
     choices: [],
   },
@@ -135,7 +135,7 @@ const SLIDES = {
   savings_milestone: {
     id: "savings_milestone",
     text: "You glance at your savings.\n\nYou're almost at $6,000.\n\nDo you want to open a Tax-Free Savings Account (TFSA)?",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "tfsa_tip_notification",
     choices: [],
   },
@@ -143,7 +143,7 @@ const SLIDES = {
   tfsa_tip_notification: {
     id: "tfsa_tip_notification",
     text: "You start reading about long-term investing.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "investment_options",
     choices: [],
     onEnter: function (gameState) {
@@ -154,7 +154,7 @@ const SLIDES = {
   investment_options: {
     id: "investment_options",
     text: "If you open a TFSA, you'll need to choose how your money is invested.\n\nHere are your main options:\n\nIndividual Stocks\nAn individual investment in a single company, it can be quite risky as it is entirely dependent on the financial performance of the single company.\n\nETFs\nAn Exchange Traded Fund is a basket of many individual stocks, managed by an organization. This is less risky as the variety of stocks helps balance out any major falls.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "time_jump_month2",
     choices: [],
   },
@@ -173,7 +173,7 @@ const SLIDES = {
   paycheck_month2: {
     id: "paycheck_month2",
     text: "Your phone buzzes.\n\nPaycheck received: $500.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "savings_decision_month2",
     choices: [],
     onEnter: function (gameState) {
@@ -184,7 +184,7 @@ const SLIDES = {
   savings_decision_month2: {
     id: "savings_decision_month2",
     text: "You review your balance.\n\nHow much of this paycheck are you saving?",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     choices: [
       { label: "Save 30% ($150)", locked: true },
       { label: "Save 50% ($250)", locked: true },
@@ -195,7 +195,7 @@ const SLIDES = {
   car_budget_explanation: {
     id: "car_budget_explanation",
     text: "You start looking at cars more seriously.\n\nYour estimate for a car is around $10,000.\n\nTo stay financially safe, you decide to save $15,000 before buying - keeping some savings aside.",
-    background: "/assets/slides/phone_paycheck.png",
+    background: "/assets/slides/phone-basic.png",
     nextSlideId: "later_evening",
     choices: [],
     onEnter: function (gameState) {
